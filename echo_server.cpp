@@ -93,13 +93,13 @@ void *worker_function (void *_data) {
         DEBUG_PRINT("version... %d\n", echo_header_view->version);
         if (echo_header_view->version == ECHO_VERSION::v1) {
             if (echo_header_view->cmd == ECHO_CMD::SEND) {
-                if (!readn(client_fd, buf_body, echo_header_view->body_len))
+                if (!readn(client_fd, buf_body, ntohs(echo_header_view->body_len)))
                     goto EXIT;
-                printf("[+] msg (%u bytes): ", echo_header_view->body_len);
+                printf("[+] msg (%u bytes): ", ntohs(echo_header_view->body_len));
                 fflush(stdout);
-                write(1, buf_body, echo_header_view->body_len);
+                write(1, buf_body, ntohs(echo_header_view->body_len));
                 void *msg;
-                size_t len = construct_echo_msg_v1(&msg, ECHO_CMD::SEND, buf_body, echo_header_view->body_len);
+                size_t len = construct_echo_msg_v1(&msg, ECHO_CMD::SEND, buf_body, ntohs(echo_header_view->body_len));
                 if (broadcast) {
                     pthread_mutex_lock(&workers_lock);
                     for(auto it = workers.begin(); it != workers.end(); it++) {

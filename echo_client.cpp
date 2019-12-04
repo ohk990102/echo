@@ -65,18 +65,18 @@ void *worker_function(void *_data) {
             goto EXIT;
         if (echo_header_view->version == ECHO_VERSION::v1) {
             if (echo_header_view->cmd == ECHO_CMD::SEND) {
-                if (!readn(client_fd, buf_body, echo_header_view->body_len))
+                if (!readn(client_fd, buf_body, ntohs(echo_header_view->body_len)))
                     goto EXIT;
-                printf("[+] msg (%u bytes): ", echo_header_view->body_len);
+                printf("[+] msg (%u bytes): ", ntohs(echo_header_view->body_len));
                 fflush(stdout);
-                write(1, buf_body, echo_header_view->body_len);
+                write(1, buf_body, ntohs(echo_header_view->body_len));
             }
             else if (echo_header_view->cmd == ECHO_CMD::END) {
-                if (!readn(client_fd, buf_body, echo_header_view->body_len))
+                if (!readn(client_fd, buf_body, ntohs(echo_header_view->body_len)))
                     goto EXIT;
-                printf("[!] server (%u bytes): ", echo_header_view->body_len);
+                printf("[!] server (%u bytes): ", ntohs(echo_header_view->body_len));
                 fflush(stdout);
-                write(1, buf_body, echo_header_view->body_len);
+                write(1, buf_body, ntohs(echo_header_view->body_len));
                 exit(0);
             }
         }

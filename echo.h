@@ -32,7 +32,7 @@ inline size_t construct_echo_msg_v1(void **msg, uint8_t cmd, void *body, uint16_
     memcpy(echo_header_view->magic, ECHO_MAGIC, sizeof(echo_header_view->magic));
     echo_header_view->version = ECHO_VERSION::v1;
     echo_header_view->cmd = cmd;
-    echo_header_view->body_len = body_len;
+    echo_header_view->body_len = htons(body_len);
     memcpy((void *)((uint8_t *) ret + sizeof(struct echo_header_v1)), body, body_len);
     *msg = ret;
     return len;
