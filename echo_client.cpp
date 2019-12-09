@@ -54,8 +54,8 @@ bool sendn(int fd,void *buf, size_t size) {
 
 void *worker_function(void *_data) {
     int client_fd = *((int *)_data);
-    void *buf = malloc(sizeof(MAX_BUF_SIZE));
-    void *buf_body = malloc(sizeof(MAX_BUF_SIZE));
+    void *buf = malloc(MAX_BUF_SIZE);
+    void *buf_body = malloc(MAX_BUF_SIZE);
     while (1) {
         DEBUG_PRINT("waiting for msg...\n");
         if(!readn(client_fd, buf, sizeof(struct echo_header_v1)))
